@@ -19,6 +19,9 @@ import net.runelite.client.plugins.microbot.util.player.Rs2Player;
 import net.runelite.client.plugins.microbot.util.widget.Rs2Widget;
 
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static net.runelite.client.plugins.microbot.util.equipment.Rs2Equipment.get;
@@ -36,6 +39,12 @@ public class GiantsFoundryScript extends Script {
     public boolean run(GiantsFoundryConfig config) {
         this.config = config;
         setState(State.CRAFTING_WEAPON, true);
+        if (config.test()) {
+            List<Map.Entry<String,Integer>> testItems = firstUsableItems();
+            for (Map.Entry<String, Integer> item : testItems) {
+                Microbot.log(String.f)
+            }
+        }
         mainScheduledFuture = scheduledExecutorService.scheduleWithFixedDelay(() -> {
             try {
                 if (!super.run()) return;
@@ -147,6 +156,109 @@ public class GiantsFoundryScript extends Script {
         return objectComposition.getName().toLowerCase().contains("(full)");
     }
 
+    public String buildItemName(SmithableItems item, SmithableBars metalType) {
+        String itemName = "%s %s";
+        return String.format(itemName, item.getName(), metalType.getName());
+    }
+
+    public List<Map.Entry<String,Integer>> firstUsableItems() {
+        List<Map.Entry<String, Integer>> items = new ArrayList<>();
+        SmithableBars firstMetalType = config.FirstBar();
+
+        if (config.firstBars()) {
+            items.add(Map.entry(buildItemName(SmithableItems.BAR, firstMetalType), SmithableItems.BAR.getNumberOfBars() / config.firstBarAmount()));
+        }
+        if (config.firstScimitar()) {
+            items.add(Map.entry(buildItemName(SmithableItems.SCIMITAR, firstMetalType), SmithableItems.SCIMITAR.getNumberOfBars() / config.firstBarAmount()));
+        }
+        if (config.firstLongsword()) {
+            items.add(Map.entry(buildItemName(SmithableItems.LONGSWORD, firstMetalType), SmithableItems.LONGSWORD.getNumberOfBars() / config.firstBarAmount()));
+        }
+        if (config.firstFullHelm()) {
+            items.add(Map.entry(buildItemName(SmithableItems.FULL_HELM, firstMetalType), SmithableItems.FULL_HELM.getNumberOfBars() / config.firstBarAmount()));
+        }
+        if (config.firstSqShield()) {
+            items.add(Map.entry(buildItemName(SmithableItems.SQ_SHIELD, firstMetalType), SmithableItems.SQ_SHIELD.getNumberOfBars() / config.firstBarAmount()));
+        }
+        if (config.firstClaws()) {
+            items.add(Map.entry(buildItemName(SmithableItems.CLAWS, firstMetalType), SmithableItems.CLAWS.getNumberOfBars() / config.firstBarAmount()));
+        }
+        if (config.firstWarhammer()) {
+            items.add(Map.entry(buildItemName(SmithableItems.WARHAMMER, firstMetalType), SmithableItems.WARHAMMER.getNumberOfBars() / config.firstBarAmount()));
+        }
+        if (config.firstBattleaxe()) {
+            items.add(Map.entry(buildItemName(SmithableItems.BATTLEAXE, firstMetalType), SmithableItems.BATTLEAXE.getNumberOfBars() / config.firstBarAmount()));
+        }
+        if (config.firstChainbody()) {
+            items.add(Map.entry(buildItemName(SmithableItems.CHAINBODY, firstMetalType), SmithableItems.CHAINBODY.getNumberOfBars() / config.firstBarAmount()));
+        }
+        if (config.firstKiteshield()) {
+            items.add(Map.entry(buildItemName(SmithableItems.KITESHIELD, firstMetalType), SmithableItems.KITESHIELD.getNumberOfBars() / config.firstBarAmount()));
+        }
+        if (config.first2hSword()) {
+            items.add(Map.entry(buildItemName(SmithableItems.TWO_H_SWORD, firstMetalType), SmithableItems.TWO_H_SWORD.getNumberOfBars() / config.firstBarAmount()));
+        }
+        if (config.firstPlatelegs()) {
+            items.add(Map.entry(buildItemName(SmithableItems.PLATELEGS, firstMetalType), SmithableItems.PLATELEGS.getNumberOfBars() / config.firstBarAmount()));
+        }
+        if (config.firstPlateskirt()) {
+            items.add(Map.entry(buildItemName(SmithableItems.PLATESKIRT, firstMetalType), SmithableItems.PLATESKIRT.getNumberOfBars() / config.firstBarAmount()));
+        }
+//        if (config.firstPlatebody()){
+//            items.add(Map.entry(buildItemName(SmithableItems.PLATEBODY, firstMetalType), SmithableItems.PLATEBODY.getNumberOfBars() / config.firstBarAmount()));
+//        }
+        return items;
+    }
+
+    public List<Map.Entry<String,Integer>> secondUsableItems() {
+        List<Map.Entry<String, Integer>> items = new ArrayList<>();
+        SmithableBars secondMetalType = config.SecondBar();
+        if (config.secondBars()){
+            items.add(Map.entry(buildItemName(SmithableItems.BAR, secondMetalType), SmithableItems.BAR.getNumberOfBars() / config.firstBarAmount()));
+        }
+        if (config.secondScimitar()){
+            items.add(Map.entry(buildItemName(SmithableItems.SCIMITAR, secondMetalType), SmithableItems.SCIMITAR.getNumberOfBars() / config.firstBarAmount()));
+        }
+        if (config.secondLongsword()){
+            items.add(Map.entry(buildItemName(SmithableItems.LONGSWORD, secondMetalType), SmithableItems.LONGSWORD.getNumberOfBars() / config.firstBarAmount()));
+        }
+        if (config.secondFullHelm()){
+            items.add(Map.entry(buildItemName(SmithableItems.FULL_HELM, secondMetalType), SmithableItems.FULL_HELM.getNumberOfBars() / config.firstBarAmount()));
+        }
+        if (config.secondSqShield()){
+            items.add(Map.entry(buildItemName(SmithableItems.SQ_SHIELD, secondMetalType), SmithableItems.SQ_SHIELD.getNumberOfBars() / config.firstBarAmount()));
+        }
+        if (config.secondClaws()){
+            items.add(Map.entry(buildItemName(SmithableItems.CLAWS, secondMetalType), SmithableItems.CLAWS.getNumberOfBars() / config.firstBarAmount()));
+        }
+        if (config.secondWarhammer()){
+            items.add(Map.entry(buildItemName(SmithableItems.WARHAMMER, secondMetalType), SmithableItems.WARHAMMER.getNumberOfBars() / config.firstBarAmount()));
+        }
+        if (config.secondBattleaxe()){
+            items.add(Map.entry(buildItemName(SmithableItems.BATTLEAXE, secondMetalType), SmithableItems.BATTLEAXE.getNumberOfBars() / config.firstBarAmount()));
+        }
+        if (config.secondChainbody()){
+            items.add(Map.entry(buildItemName(SmithableItems.CHAINBODY, secondMetalType), SmithableItems.CHAINBODY.getNumberOfBars() / config.firstBarAmount()));
+        }
+        if (config.secondKiteshield()){
+            items.add(Map.entry(buildItemName(SmithableItems.KITESHIELD, secondMetalType), SmithableItems.KITESHIELD.getNumberOfBars() / config.firstBarAmount()));
+        }
+        if (config.second2hSword()){
+            items.add(Map.entry(buildItemName(SmithableItems.TWO_H_SWORD, secondMetalType), SmithableItems.TWO_H_SWORD.getNumberOfBars() / config.firstBarAmount()));
+        }
+        if (config.secondPlatelegs()){
+            items.add(Map.entry(buildItemName(SmithableItems.PLATELEGS, secondMetalType), SmithableItems.PLATELEGS.getNumberOfBars() / config.firstBarAmount()));
+        }
+        if (config.secondPlateskirt()){
+            items.add(Map.entry(buildItemName(SmithableItems.PLATESKIRT, secondMetalType), SmithableItems.PLATESKIRT.getNumberOfBars() / config.firstBarAmount()));
+        }
+//        if (config.secondPlatebody()){
+//            items.add(Map.entry(buildItemName(SmithableItems.PLATE_BODY, secondMetalType), SmithableItems.PLATE_BODY.getNumberOfBars() / config.firstBarAmount()));
+//        }
+
+        return items;
+    }
+
     public void fillCrucible() {
         if (!hasSelectedMould())
             return;
@@ -158,28 +270,73 @@ public class GiantsFoundryScript extends Script {
             return;
         }
 
-        if (!Rs2Inventory.hasItemAmount(config.FirstBar().getName(), config.firstBarAmount())
-                && !Rs2Inventory.hasItemAmount(config.SecondBar().getName(), config.secondBarAmount()) && !canPour()) {
-            Rs2Bank.useBank();
-            //check if inv is empty and deposit all inv items
-            if(Rs2Bank.count(config.FirstBar().getName()) < config.firstBarAmount() || Rs2Bank.count(config.SecondBar().getName()) < config.secondBarAmount()) {
-                Microbot.log("Insufficient bars in bank to continue");
-                this.shutdown();
-                return;
+        List<Map.Entry<String,Integer>> firstItems = firstUsableItems();
+        List<Map.Entry<String,Integer>> secondItems = secondUsableItems();
+        String firstItemName = null;
+        String secondItemName = null;
+        for (Map.Entry<String, Integer> item : firstItems) {
+            String itemName = item.getKey();
+            int requiredAmount = item.getValue();
+
+            if (!Rs2Inventory.hasItemAmount(itemName, requiredAmount) && !canPour()) {
+                Rs2Bank.useBank();
+                //check if inv is empty and deposit all inv items
+                Microbot.log(String.format("Checking back for %s in bank", itemName));
+                if (Rs2Bank.count(itemName) < requiredAmount) {
+                    continue;
+//                    Microbot.log("Insufficient bars in bank to continue");
+//                    this.shutdown();
+//                    return;
+                }
+                Rs2Bank.withdrawX(true, itemName, requiredAmount);
+                if (Rs2Inventory.hasItemAmount(itemName, requiredAmount)) {
+                    firstItemName = itemName;
+                    break;
+                }
             }
-            Rs2Bank.withdrawX(true, config.FirstBar().getName(), config.firstBarAmount());
-            Rs2Bank.withdrawX(true, config.SecondBar().getName(), config.secondBarAmount());
-            Rs2Bank.closeBank();
+        }
+        for (Map.Entry<String, Integer> item : secondItems) {
+            String itemName = item.getKey();
+            int requiredAmount = item.getValue();
+
+            if (!Rs2Inventory.hasItemAmount(itemName, requiredAmount) && !canPour()) {
+                Rs2Bank.useBank();
+                //check if inv is empty and deposit all inv items
+                Microbot.log(String.format("Checking back for %s in bank", itemName));
+                if (Rs2Bank.count(itemName) < requiredAmount) {
+                    continue;
+//                    Microbot.log("Insufficient bars in bank to continue");
+//                    this.shutdown();
+//                    return;
+                }
+                Rs2Bank.withdrawX(true, itemName, requiredAmount);
+                if (Rs2Inventory.hasItemAmount(itemName, requiredAmount)) {
+                    secondItemName = itemName;
+                    break;
+                }
+            }
+        }
+        if (firstItemName == null || secondItemName == null) {
+            Microbot.log("Insufficient items in inventory to continue");
+            this.shutdown();
             return;
         }
+//            Rs2Bank.closeBank();
+//            return;
+//            if (Rs2Inventory.hasItemAmount(itemName, requiredAmount)) {
+//                Microbot.log("Found " + itemName + " in inventory, proceeding to fill crucible.");
+//                break;
+//            }
+
+
         Rs2Bank.closeBank();
-        if (Rs2Inventory.hasItem(config.FirstBar().getName()) && !canPour()) {
+        if (Rs2Inventory.hasItem(firstItemName) && !canPour()) {
             Rs2GameObject.interact(CRUCIBLE, "Fill");
             sleepUntil(() -> Rs2Widget.findWidget("What metal would you like to add?", null) != null, 5000);
             Rs2Keyboard.keyPress(getKeyFromBar(config.FirstBar()));
             sleepUntil(() -> !Rs2Inventory.hasItem(config.FirstBar().getName()), 5000);
         }
-        if (Rs2Inventory.hasItem(config.SecondBar().getName()) && !canPour()) {
+        if (Rs2Inventory.hasItem(secondItemName) && !canPour()) {
             Rs2GameObject.interact(CRUCIBLE, "Fill");
             sleepUntil(() -> Rs2Widget.findWidget("What metal would you like to add?", null) != null, 5000);
             sleep(600, 1200);
